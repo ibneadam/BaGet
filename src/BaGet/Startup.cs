@@ -8,6 +8,8 @@ using BaGet.Core.Entities;
 using BaGet.Core.Services;
 using BaGet.Extensions;
 using BaGet.Web.Extensions;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -38,6 +40,15 @@ namespace BaGet
             services.Configure<FileSystemStorageOptions>(Configuration.GetSection(nameof(BaGetOptions.Storage)));
             services.ConfigureAzure(Configuration);
 
+            // https://github.com/Azure-Samples/active-directory-dotnet-webapp-webapi-openidconnect-aspnetcore
+            // https://github.com/Azure-Samples/active-directory-dotnet-native-aspnetcore
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddAzureAdBearer(options => Configuration.Bind("AzureAd", options));
+
             services.AddCors(options =>
             {
                 options.AddPolicy(
@@ -55,7 +66,7 @@ namespace BaGet
                 options.KnownProxies.Clear();
             });
 
-            services.AddSingleton<IAuthenticationService, ApiKeyAuthenticationService>(provider =>
+            services.AddSingleton<BaGet.Core.Services.IAuthenticationService, ApiKeyAuthenticationService>(provider =>
             {
                 var options = provider.GetRequiredService<IOptions<BaGetOptions>>().Value;
 
@@ -134,6 +145,7 @@ namespace BaGet
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseForwardedHeaders();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -151,6 +163,8 @@ namespace BaGet
                         .Migrate();
                 }
             }
+
+            app.UseAuthentication();
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
