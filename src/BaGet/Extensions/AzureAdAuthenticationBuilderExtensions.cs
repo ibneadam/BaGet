@@ -11,14 +11,12 @@ namespace BaGet.Extensions
     // See: https://github.com/Azure-Samples/active-directory-dotnet-native-aspnetcore/blob/master/TodoListService/Extensions/AzureAdAuthenticationBuilderExtensions.cs
     public static class AzureAdServiceCollectionExtensions
     {
-        public static AuthenticationBuilder AddAzureAdBearer(this AuthenticationBuilder builder)
-            => builder.AddAzureAdBearer(_ => { });
-
         public static AuthenticationBuilder AddAzureAdBearer(this AuthenticationBuilder builder, Action<AzureAdOptions> configureOptions)
         {
             builder.Services.Configure(configureOptions);
             builder.Services.AddSingleton<IConfigureOptions<JwtBearerOptions>, ConfigureAzureOptions>();
             builder.AddJwtBearer();
+
             return builder;
         }
 
