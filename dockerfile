@@ -7,10 +7,10 @@ WORKDIR /src
 COPY . /src
 WORKDIR /src
 RUN dotnet restore src/BaGet
-RUN dotnet build src/BaGet -c Debug -o /app
+RUN dotnet build src/BaGet -c Release -o /app
 
 FROM build AS publish
-RUN dotnet publish src/BaGet -c Debug -o /app
+RUN dotnet publish src/BaGet -c Release -o /app
 
 FROM base AS final
 WORKDIR /app
