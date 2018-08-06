@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using NuGet.Versioning;
 
-namespace BaGet.Tools.ImportDownloads
+namespace BaGet.Core.Mirror
 {
     public interface IPackageDownloadsSource
     {

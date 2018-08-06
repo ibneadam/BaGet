@@ -6,7 +6,7 @@ using BaGet.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace BaGet.Tools.ImportDownloads
+namespace BaGet.Core.Mirror
 {
     public class DownloadsImporter
     {

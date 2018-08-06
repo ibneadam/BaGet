@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NuGet.Versioning;
 
-namespace BaGet.Tools.ImportDownloads
+namespace BaGet.Core.Mirror
 {
     // See https://github.com/NuGet/NuGet.Services.Metadata/blob/master/src/NuGet.Indexing/Downloads.cs
     public class PackageDownloadsJsonSource : IPackageDownloadsSource
@@ -27,6 +27,8 @@ namespace BaGet.Tools.ImportDownloads
 
         public async Task<Dictionary<string, Dictionary<string, long>>> GetPackageDownloadsAsync()
         {
+            _logger.LogInformation("Fetching package downloads...");
+
             var serializer = new JsonSerializer();
             var results = new Dictionary<string, Dictionary<string, long>>();
 
